@@ -1,1 +1,7 @@
-package go_jwt_restful
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("running...")
+}

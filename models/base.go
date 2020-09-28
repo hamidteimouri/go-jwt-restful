@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	"os"
@@ -24,8 +25,9 @@ func init() {
 	DbPassword := os.Getenv("DB_PASSWORD")
 	DbName := os.Getenv("DB_NAME")
 	DbHost := os.Getenv("DB_HOST")
+	DbPort := os.Getenv("DB_PORT")
 
-	dbURL := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", DbHost, DbUsername, DbName, DbPassword)
+	dbURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", DbUsername, DbPassword, DbHost, DbPort, DbName)
 
 	fmt.Println(dbURL)
 

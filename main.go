@@ -3,18 +3,19 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/mux"
-	//"github.com/hamidteimouri/go-jwt-restful/controllers"
-	//"github.com/hamidteimouri/go-jwt-restful/middlewares"
+	"github.com/hamidteimouri/go-jwt-restful/middlewares"
+
+	"github.com/hamidteimouri/go-jwt-restful/controllers"
 	"net/http"
 	"os"
 )
 
 func main() {
 	router := mux.NewRouter()
-	//router.Use(middlere.JwAuth)
+	router.Use(middlewares.JwtAuth)
 
-	//router.HandleFunc("/api/users/register", middlewares.SetJsonMiddleware(controllers.createUser)).Methods("POST")
-	//router.HandleFunc("/api/users/login", middlewares.SetJsonMiddleware(controllers.createUser)).Methods("POST")
+	router.HandleFunc("/api/users/register", middlewares.SetJsonMiddleware(controllers.CreateUser)).Methods("POST")
+	router.HandleFunc("/api/users/login", middlewares.SetJsonMiddleware(controllers.SignInUser)).Methods("POST")
 
 	err := http.ListenAndServe(getPort(), router)
 

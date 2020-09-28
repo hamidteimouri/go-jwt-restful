@@ -2,24 +2,31 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
 	"github.com/hamidteimouri/go-jwt-restful/models"
 	"github.com/hamidteimouri/go-jwt-restful/utils"
 	"io/ioutil"
 	"net/http"
 )
 
-var CreateUser = func(writer http.ResponseWriter, request *http.Request) {
-	/* decode request's body to user struct */
-	user := &models.Token{}
-	err := json.NewDecoder(request.Body).Decode(user)
+var CreateUser = func(writer http.ResponseWriter, r *http.Request) {
+	/* decoding request body into User struct */
+	user := &models.User{}
+	err := json.NewDecoder(r.Body).Decode(user)
 	if err != nil {
-		utils.ERROR(writer, http.StatusUnprocessableEntity, errors.New(err.Error()))
+		utils.ERROR(writer, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	/* calling create user function */
-	//response , err := user.Create()
+	/* calling create user func */
+	response, err := user.Create()
+	if err != nil {
+		/* return error response if any error or malformed request path */
+		utils.ERROR(writer, http.StatusUnauthorized, err)
+		return
+	}
+
+	/* sending OK and the user information as response */
+	utils.JsonResponse(writer, http.StatusCreated, response)
 }
 
 var SignInUser = func(writer http.ResponseWriter, request *http.Request) {
